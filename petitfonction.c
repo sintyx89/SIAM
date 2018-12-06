@@ -23,7 +23,7 @@ void victoire(char basculeprime)
 }
 
 //fonction qui modifie l'orientation d'une piece 
-void orien_rotation(char plateau[5][5][2],short int bascule, char link[100], short int casx, short int casy)
+void orien_rotation(char plateau[5][5][2],short int bascule, char link[256], short int casx, short int casy)
 {
 	char rot;
 	//boucle dont la sortie demande la saisie d'une orientation 'valable'
@@ -37,7 +37,7 @@ void orien_rotation(char plateau[5][5][2],short int bascule, char link[100], sho
 }
 
 //fonction de choix de case
-void entrecase(char plateau[5][5][2], short int bascule, char link[100], short int *casx, short int *casy)
+void entrecase(char plateau[5][5][2], short int bascule, char link[256], short int *casx, short int *casy)
 {
 	char casyprime;
 	short int casxprime;
@@ -63,7 +63,7 @@ void entrecase(char plateau[5][5][2], short int bascule, char link[100], short i
 }
 
 //fonction de rotation, appelle entrecase, orien_rotation
-short int rotation(char plateau [5][5][2], short int bascule, char link[100])
+short int rotation(char plateau [5][5][2], short int bascule, char link[256])
 {
 	short int casx, casy;
 	//choix de la case
@@ -96,7 +96,7 @@ void regles()
 //fn de sauvegarde et quitte en menus
 
 //fonction d'ouverture d'un jeux sauvegardé
-void chargement(char plateau[5][5][2], short int *bascule, short int *pionsE, short int *pionsR, char link[100])
+void chargement(char plateau[5][5][2], short int *bascule, short int *pionsE, short int *pionsR, char link[256])
 {
     	char cache;
     	short int code, m, n, t;
@@ -144,7 +144,7 @@ void chargement(char plateau[5][5][2], short int *bascule, short int *pionsE, sh
 }
 
 //teste les anciennes saves et crée un nouveau fichier si besoin
-void para_save(char plateau[5][5][2], short int bascule, char link[100])
+void para_save(char plateau[5][5][2], short int bascule, char link[256])
 {
   	char choix;
   	short int erreur, n=0, m[100];
@@ -183,49 +183,62 @@ void para_save(char plateau[5][5][2], short int bascule, char link[100])
     		}while(!(choix <= 100 && choix > 0));
     
 	//passe devant tous les autres fichier
-    	while((lecture = readdir(dossier)) && ((n != (choix + 1)) && (strstr(lecture->d_name, ".save"))));
+		for(n = 0;(lecture = readdir(dossier)) && n < 100;) 
+    		{
+    	    		if(strstr(lecture->d_name, ".save"))
+			{
+				if( n == choix-1)
+				{
+					link = lecture->d_name;
+					break;
+				}
+				n++;
+			}		
+    		}	
 
-    	printf("Vous sauverez sur le fichier : %s\n", lecture->d_name);
-   	link = lecture ->d_name;
-	printf("%s, %s", link[100],lecture->d_name);
+    	printf("Vous sauverez sur le fichier : %s\n", link);
+	getchar();
     	closedir(dossier);
   	}
-  
-  if(choix == 'N' && dossier != NULL)
-  {
-    	do
-    	{
-      		erreur = 0;
-     		rewinddir(dossier);
-      		//demande nom
-      		printf("nom du nouveau fichier : ");
-  		scanf("%s", link);
-     		printf("%s", link); 
-      		//analyse si il existe deja
-    		for(n = 0;((lecture = readdir(dossier)) && n < 100)|| link == lecture->d_name; n++);
-		if(lecture->d_name == link)
-            		erreur = 1;		
-      
-      		if(strchr(link, ' '))//test si espace sinon erreur
-      		{
-        		printf("FAUT PAS D'ESPACES!");
-      			erreur = 1;
-        		continue;
-      		}
-      		if(!strstr(link, ".save"))
-        		strcat(link, ".save");//teste si il y a .save dedans, sinon on rajoute
-	}while(erreur == 1);
-}}
+ 	
+	//si nouveau lien 
+  	if(choix == 'N' && dossier != NULL)
+  	{
+    		do
+    		{
+      			erreur = 0;
+     			rewinddir(dossier);
+      			//demande nom
+      			printf("nom du nouveau fichier : ");
+  			scanf("%s", link);
+     			printf("%s", link); 
+      			//analyse si il existe deja
+    			for(n = 0;((lecture = readdir(dossier)) && n < 100)|| link == lecture->d_name; n++);
+			if(lecture->d_name == link)
+            			erreur = 1;		
+      	
+      			if(strchr(link, ' '))//test si espace sinon erreur
+      			{
+        			printf("FAUT PAS D'ESPACES!");
+      				erreur = 1;
+        			continue;
+      			}
+      			if(!strstr(link, ".save"))
+        			strcat(link, ".save");//teste si il y a .save dedans, sinon on rajoute
+		}while(erreur == 1);
+	}
+	sauvegarde(plateau, bascule, link);
+}
 //fonction de sauvegarde de l'etat de la partie
-void sauvegarde(char plateau[5][5][2], short int bascule, char link[100])
+void sauvegarde(char plateau[5][5][2], short int bascule, char link[256])
 {
-    short int code, m, n, t;
-    printf("\nsauvegarde en cours");
-    getchar();
+    short int code, m, n, t;    
     FILE* save = NULL;
+
     save = fopen(link, "w");
     fseek(save, 0, SEEK_SET);
-    
+    printf("partie sauvegardée sur %s", link);
+
     if(save != NULL)
     {
         //écrire le plateau
@@ -265,8 +278,8 @@ void Color(int couleurDuTexte,int couleurDeFond)
 }
 */
 
-  //fonction de saisie des choix proposé
-void saisie(char plateau[5][5][2], short int bascule, char link[100], char *ptchoix)
+//fonction de saisie des choix proposé
+void saisie(char plateau[5][5][2], short int bascule, char link[256], char *ptchoix)
 {
     char entre = 0;
     do
@@ -297,20 +310,25 @@ void minmaj(char *cara)
     (*cara) -= 32;
 }
 
-void quitter(char plateau[5][5][2], short int bascule, char link[100])
+
+//quitte le programme en douceur
+void quitter(char plateau[5][5][2], short int bascule, char link[256])
 {
 	char save;
 	
 	do{
   		printf("voulez-vous sauvegarder?   oui(1)   non(2) : ");
   		scanf("%c",&save);
-	}while(save != 1 );
+		getchar();
+	}while(save != '1' && save != '2');
 
  	if (save == '1')
   	{
      		sauvegarde(plateau, bascule, link);
   	}
-  	printf("fermeture du programme, vous retrouverez ce que vous avez entrée");
+  	printf("fermeture du programme, vous retrouverez ce que vous avez entrée\n\n");
+	getchar();
+	system("clear");
   	exit(0);  
 }
 

@@ -24,7 +24,7 @@
 
 void main()
 {
-	char plateau[5][5][2] = {0}, sauv, linksave[100] = {"SIAM.save"};/*tableau avec toutes les positions des pions
+	char plateau[5][5][2] = {0}, sauv, linksave[256] = {"SIAM.save"};/*tableau avec toutes les positions des pions
 				      j'ai choisie les position sous forme matriciel
 				      donc plateau[y][x] le [2] est pour contenir 
 				      le type et l'orientation*/

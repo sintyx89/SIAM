@@ -52,7 +52,7 @@ void affichage(char plateau[5][5][2])
 }
 
 //fonction d'entrée de choix de coups, appelle affichage, deplace, place, rotation, sauvegarde, saisie
-short int entre(char plateau [5][5][2], short int bascule,char link[100], short int* pionsE, short int* pionsR, short int *bascsave)
+short int entre(char plateau [5][5][2], short int bascule,char link[256], short int* pionsE, short int* pionsR, short int *bascsave)
 { 
 	char choix;
 	short int coup = 0, **pion, victoire = 0;
@@ -63,7 +63,7 @@ short int entre(char plateau [5][5][2], short int bascule,char link[100], short 
 	//utilisation de la bascule pour determiner à quel des joueurs c'est le tour
 		if(bascule)	//bascule = 1 -> rhino
 		{
-			printf("\n\nc'est aux RHINO de jouer				// save(s) \\\\");
+			printf("\n\nc'est aux RHINO de jouer");
 			pion = &pionsR;
 		}
 			
@@ -80,7 +80,10 @@ short int entre(char plateau [5][5][2], short int bascule,char link[100], short 
 		if(**pion != 0)
 	        	printf("\nposer un pion(p)\n");
     		//proposition de la sauvegarde, disponible à tout moment
-        	printf("\nsauvegarder dans un fichier(s)\n\n");
+        	if(*bascsave == 0)
+			printf("\nparametriser la sauvegarde(s)\n\n");
+		if(*bascsave == 1)
+			printf("\n		sauvegarder (s)\n\n");
         
 		
 		printf(": ");	
@@ -97,16 +100,18 @@ short int entre(char plateau [5][5][2], short int bascule,char link[100], short 
 		if(choix == 'p' && ((bascule == 1 && *pionsR > 0)||(bascule == 0 && *pionsE > 0)))
 			coup = place(plateau, bascule, link, &pion, &pionsR, &pionsE);
         
-    if(choix == 's' && *bascsave == 1)
-    {      
-        sauvegarde(plateau, bascule, link);
-       	printf("\npartie sauvegardée");
-    }
-    else if (choix == 's' && *bascsave == 0)
-    {
-      para_save(plateau, bascule, link);
-      (*bascsave) = 1;
-    }
+    		
+		//differentes saves
+		if(choix == 's' && *bascsave == 1)
+    		{      
+        		sauvegarde(plateau, bascule, link);
+       			printf("\npartie sauvegardée");
+    		}
+    		else if (choix == 's' && *bascsave == 0)
+    		{
+      			para_save(plateau, bascule, link);
+      			(*bascsave) = 1;
+    		}
         
 	}while(!coup);
 
@@ -114,7 +119,7 @@ short int entre(char plateau [5][5][2], short int bascule,char link[100], short 
 }
 
 //fonction de déplacement, coups possible si reserve du joueur<5
-short int deplace(char plateau[5][5][2], short int bascule, char link[100], short int **pionR, short int **pionE)
+short int deplace(char plateau[5][5][2], short int bascule, char link[256], short int **pionR, short int **pionE)
 {
 	short int casx, casy, casxx, casyy;
 	char orientation;
@@ -174,7 +179,7 @@ short int deplace(char plateau[5][5][2], short int bascule, char link[100], shor
 }
 
 //fonction de placement des pieces, apelle enrtecase, orien_rotation, angle, calculateur
-short int place(char plateau[5][5][2], short int bascule, char link[100], short int ***pion, short int **pionR, short int **pionE)
+short int place(char plateau[5][5][2], short int bascule, char link[256], short int ***pion, short int **pionR, short int **pionE)
 {
 	short int casx, casy;
 	char orientation, rot;
@@ -267,7 +272,7 @@ short int place(char plateau[5][5][2], short int bascule, char link[100], short 
 }
 
 // fonction de l'angle dans la poussé, appelle calculateur
-short int angle(char plateau [5][5][2], short int bascule, char link [100], short int casx, short int casy, short int **pionR, short int **pionE)
+short int angle(char plateau [5][5][2], short int bascule, char link [256], short int casx, short int casy, short int **pionR, short int **pionE)
 {
 	char orientation;
 	short int res; 
