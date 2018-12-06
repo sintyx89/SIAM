@@ -196,9 +196,9 @@ void para_save(char plateau[5][5][2], short int bascule, char link[256])
 			}		
     		}	
 
-    	printf("Vous sauverez sur le fichier : %s\n", link);
-	getchar();
-    	closedir(dossier);
+    		printf("Vous sauverez sur le fichier : %s\n", link);
+		getchar();
+    		closedir(dossier);
   	}
  	
 	//si nouveau lien 
@@ -208,14 +208,30 @@ void para_save(char plateau[5][5][2], short int bascule, char link[256])
     		{
       			erreur = 0;
      			rewinddir(dossier);
-      			//demande nom
-      			printf("nom du nouveau fichier : ");
-  			scanf("%s", link);
-     			printf("%s", link); 
-      			//analyse si il existe deja
-    			for(n = 0;((lecture = readdir(dossier)) && n < 100)|| link == lecture->d_name; n++);
-			if(lecture->d_name == link)
-            			erreur = 1;		
+      			
+			//demande nom
+      			printf("\nnom du nouveau fichier : ");
+  			scanf("%s", link); 
+      			
+			
+			//teste si il y a .save dedans, sinon on rajoute
+			if(!strstr(link, ".save"))
+        			strcat(link, ".save");
+				
+			//analyse si il existe deja
+			while(lecture = readdir(dossier))
+				if(lecture->d_name == link)
+				{
+					do{
+						printf("\nle fichier existe déjà\nVoulez vous l'écraser ?(O/N) :");
+						saisie(plateau, bascule, link, &choix);
+						minmaj(&choix);
+					}while(choix != 'N' && choix != 'O');	
+					
+					if(choix == 'N')
+						erreur = 1;
+								
+				}
       	
       			if(strchr(link, ' '))//test si espace sinon erreur
       			{
@@ -223,8 +239,6 @@ void para_save(char plateau[5][5][2], short int bascule, char link[256])
       				erreur = 1;
         			continue;
       			}
-      			if(!strstr(link, ".save"))
-        			strcat(link, ".save");//teste si il y a .save dedans, sinon on rajoute
 		}while(erreur == 1);
 	}
 	sauvegarde(plateau, bascule, link);

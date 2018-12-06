@@ -87,7 +87,7 @@ short int entre(char plateau [5][5][2], short int bascule,char link[256], short 
         
 		
 		printf(": ");	
-    		saisie(plateau, bascule, link, &choix); //choix de mvt à blinder//ajouter le fonction saisie
+    		saisie(plateau, bascule, link, &choix); //choix de mvt à blinder
     		
 		
 		// appel des fonction selon choix, blindé	
@@ -105,7 +105,7 @@ short int entre(char plateau [5][5][2], short int bascule,char link[256], short 
 		if(choix == 's' && *bascsave == 1)
     		{      
         		sauvegarde(plateau, bascule, link);
-       			printf("\npartie sauvegardée");
+       			printf("\npartie sauvegardée sur : %s", link);
     		}
     		else if (choix == 's' && *bascsave == 0)
     		{
@@ -161,7 +161,7 @@ short int deplace(char plateau[5][5][2], short int bascule, char link[256], shor
 		if((calculateur(plateau, orientation, casxx, casyy) < 10)&&(orientation == plateau[casy][casy][1]))
 		{
 			deplaceur(plateau, orientation, casx, casy, bascule,  &pionR, &pionE);
-			return 1;
+			return 1;//bien passé
 		}
 			//cas deplacement impossible
 		printf("\nresisstance trop forte");
@@ -212,7 +212,7 @@ short int place(char plateau[5][5][2], short int bascule, char link[256], short 
                		{                       
                         angle(plateau, bascule, link, casx, casy, pionR, pionE);
                         	(***pion)--;
-                       		return 1;
+                       		return 1;//bien passé
                		 }
         		
 			//cas ou c'est sur les lignes et colones		
@@ -250,7 +250,7 @@ short int place(char plateau[5][5][2], short int bascule, char link[256], short 
 
 				(***pion)--; 
 
-				return 1;
+				return 1;//bien passé
                		}
     		//cas no valide
                    	printf("\nentrée non valide");
@@ -300,7 +300,6 @@ short int angle(char plateau [5][5][2], short int bascule, char link [256], shor
   //cas coups non valide
 	printf("resisstance trop forte");
 	getchar();
-
 	return 0;
 }
 
@@ -582,6 +581,7 @@ void deplaceur(char plateau[5][5][2], char orientation, short int casx, short in
      		}
 		break;
 	}
+	return;
    	
 }
 
