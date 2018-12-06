@@ -50,8 +50,10 @@ void main()
     	}while(sauv != 'O' && sauv != 'N');
     
     if(sauv == 'O')
-        chargement(plateau, &bascule, &pionsE, &pionsR, linksave);
-
+    {
+	    para_chargement(plateau, bascule, linksave);
+	    chargement(plateau, &bascule, &pionsE, &pionsR, linksave);
+    }
 	while(!victoire)
 	{
 

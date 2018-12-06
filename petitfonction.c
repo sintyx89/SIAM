@@ -93,7 +93,66 @@ void regles()
   	getchar();
 }
 
-//fn de sauvegarde et quitte en menus
+void para_chargement(char plateau[5][5][2], short int bascule, char link[256])
+{
+ 	char choix;
+  	short int erreur, n=0, m[100];
+  	struct dirent *lecture;
+  	DIR* dossier = NULL;
+  	dossier = opendir(".");
+  
+  	system("clear");
+  	printf("	----PARAMETRE DE CHARGEMENT----\n\n\n");
+  	  
+  	if(dossier != NULL)
+  	{
+    		do
+    		{
+			n = 0;
+			printf("\n\n");
+    			while((lecture = readdir(dossier))) 
+    			{
+    	    			if(strstr(lecture->d_name, ".save"))
+				{
+					printf("-------------------------------------------------\n");
+					printf(" %d -- %s\n", n + 1, lecture->d_name);
+					n++;
+				}
+				
+    			}		
+			printf("-------------------------------------------------");
+    			rewinddir(dossier);
+    			printf("\nlequel ? : ");
+    			scanf("%d", &choix);
+    		}while(!(choix <= 100 && choix > 0));
+    
+	//passe devant tous les autres fichier
+		for(n = 0;(lecture = readdir(dossier)) && n < 100;) 
+    		{
+    	    		if(strstr(lecture->d_name, ".save"))
+			{
+				if( n == choix-1)
+				{
+					link = lecture->d_name;
+					break;
+				}
+				n++;
+			}		
+    		}	
+
+    		printf("Vous chargerez le fichier : %s\n", link);
+		getchar();
+    		closedir(dossier);
+  	}
+ 	
+
+
+
+}
+
+
+
+
 
 //fonction d'ouverture d'un jeux sauvegardé
 void chargement(char plateau[5][5][2], short int *bascule, short int *pionsE, short int *pionsR, char link[256])
@@ -105,7 +164,7 @@ void chargement(char plateau[5][5][2], short int *bascule, short int *pionsE, sh
     	save = fopen(link, "r"); // ouverture du fichier en mode lecture
     	fseek(save, 0, SEEK_SET);
   
-  	//cas de sauvegarde lisible
+  //cas de sauvegarde lisible
     if(save != NULL)
     {	//balayage du plateau pour placement des information sauvegardé
         for(n = 0; n <= 4; n++)
@@ -311,6 +370,12 @@ void saisie(char plateau[5][5][2], short int bascule, char link[256], char *ptch
     		entre += 32;
     }
     while(entre==0);
+
+    //videur de buffer
+    while(entre != '\n' && entre != EOF)
+    {
+    	entre = getchar();
+    }
 
     //choix retourné à l'appellant
     *ptchoix = entre;

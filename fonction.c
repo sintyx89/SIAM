@@ -107,7 +107,7 @@ short int entre(char plateau [5][5][2], short int bascule,char link[256], short 
         		sauvegarde(plateau, bascule, link);
        			printf("\npartie sauvegardée sur : %s", link);
     		}
-    		else if (choix == 's' && *bascsave == 0)
+    		else if(choix == 's' && *bascsave == 0)
     		{
       			para_save(plateau, bascule, link);
       			(*bascsave) = 1;
