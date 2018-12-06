@@ -1,0 +1,21 @@
+CC=gcc
+CFLAGS=-W -Wall -ansi -pedantic
+LDFLAGS = 
+EXEC=SIAM
+
+all: $(EXEC)
+
+SIAM: fonction.o main.o petitfonction.o
+	$(CC) -o $@ $^ $(LDFLAGS)
+
+
+main.o: header.h 
+
+%.o: %.c
+	$(CC) -o $@ -c $< $(CFLAGS)
+
+clean: 
+	rm -rf *.o
+
+mrproper: clean
+	rm -rf SIAM	
