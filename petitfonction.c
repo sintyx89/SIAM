@@ -179,10 +179,10 @@ void chargement(char plateau[5][5][2], short int *bascule, short int *pionsE, sh
                            	plateau[n][m][t] = cache;
                         	printf("--%d%c", plateau[n][m][t], cache);
                 }
-             		if(plateau[n][m][1] == 'R')
-                  		(*pionsR)--;
-             		if(plateau[n][m][1] == 'E')
-                  		(*pionsE)--;
+             	if(plateau[n][m][1] == 'R')
+                  	(*pionsR)--;
+             	if(plateau[n][m][1] == 'E')
+                  	(*pionsE)--;
             }
       
       	fscanf(save, "%d", &cache);	
@@ -355,10 +355,11 @@ void Color(int couleurDuTexte,int couleurDeFond)
 void saisie(char plateau[5][5][2], short int bascule, char link[256], char *ptchoix)
 {
     char entre = 0;
+    short int c;
     do
     {
         scanf("%c", &entre);
-      	getchar();
+	getchar();
       
     	//saisie d'échap pour quitter
         if (entre == 27)
@@ -371,12 +372,10 @@ void saisie(char plateau[5][5][2], short int bascule, char link[256], char *ptch
     }
     while(entre==0);
 
-    //videur de buffer
-    while(entre != '\n' && entre != EOF)
-    {
-    	entre = getchar();
-    }
-
+    /*				//videur de buffer
+	while (c != EOF && c != '\n')
+		c = getchar();
+*/
     //choix retourné à l'appellant
     *ptchoix = entre;
   	return;
@@ -405,6 +404,7 @@ void quitter(char plateau[5][5][2], short int bascule, char link[256])
   	{
      		sauvegarde(plateau, bascule, link);
   	}
+
   	printf("fermeture du programme, vous retrouverez ce que vous avez entrée\n\n");
 	getchar();
 	system("clear");
