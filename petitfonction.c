@@ -144,10 +144,6 @@ void para_chargement(char plateau[5][5][2], short int bascule, char link[256])
 		getchar();
     		closedir(dossier);
   	}
- 	
-
-
-
 }
 
 

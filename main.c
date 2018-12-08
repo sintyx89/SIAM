@@ -14,11 +14,17 @@
 #include <sys/types.h>
 #include <dirent.h>
 
+//réseaux
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 
 
 #include "headers.h" //implémentation du fichier de prototypes
 #include "fonction.c" 
 #include "petitfonction.c"
+#include "reseaux.c" 
 
 //#define BLANC = '\033[0;31m'
 //#define 
@@ -26,7 +32,7 @@
 
 void main()
 {
-	char plateau[5][5][2] = {0}, sauv, linksave[256] = {"SIAM.save"};/*tableau avec toutes les positions des pions
+	char plateau[5][5][2] = {0}, sauv, linksave[256] = {"SIAM.save"}, reseaux;/*tableau avec toutes les positions des pions
 				      j'ai choisie les position sous forme matriciel
 				      donc plateau[y][x] le [2] est pour contenir 
 				      le type et l'orientation*/
@@ -45,33 +51,61 @@ void main()
 	regles();
 
     
-  	do{
-        	printf("Voulez-vous charger une partie précédente ? (O/N) : ");
-        	saisie(plateau, bascule, linksave, &sauv);
-      		minmaj(&sauv);
-    	}while(sauv != 'O' && sauv != 'N');
-    
-    if(sauv == 'O')
-    {
-	    para_chargement(plateau, bascule, linksave);
-	    chargement(plateau, &bascule, &pionsE, &pionsR, linksave);
-    }
-	while(!victoire)
+	do{
+		printf("Voulez-vous jouer avec une autre machine sur le reseau local ? (O/N) :");
+		saisie(plateau, bascule, linksave, &reseaux);
+		minmaj(&reseaux);
+
+	}while(reseaux == 'O' && reseaux == 'N');
+	
+	//si on joue sur 2 machines
+	if(reseaux == 'O')
 	{
+		do{
+			printf("Voulez vous etres le serveur(s) ou le client(c) : ");
+			saisie(plateau, bascule, linksave, &reseaux);
+		}while(reseaux == 's' && reseaux == 'c');
 
-		entre(plateau, bascule, linksave, &pionsE, &pionsR, &bascsave);
-
-
-		
-		if(!bascule)
+		if(reseaux == 's')
 		{
-			bascule = 1;
-			continue;
+			server(plateau);
 		}
-		else if(bascule)
+		else if (reseaux == 'c')
 		{
-			bascule = 0;
-			continue;
+			client(plateau);
+		}
+	}
+	
+	//si on joue à 2 sur une seule machine
+	if(reseaux == 'N')
+	{
+  		do{
+        		printf("Voulez-vous charger une partie précédente ? (O/N) : ");
+        		saisie(plateau, bascule, linksave, &sauv);
+      			minmaj(&sauv);
+    		}while(sauv != 'O' && sauv != 'N');
+
+    		if(sauv == 'O')
+    		{
+		    	para_chargement(plateau, bascule, linksave);
+			chargement(plateau, &bascule, &pionsE, &pionsR, linksave);
+    		}
+
+		while(!victoire)
+		{
+
+			entre(plateau, bascule, linksave, &pionsE, &pionsR, &bascsave);
+
+			if(!bascule)
+			{
+				bascule = 1;
+				continue;
+			}
+			else if(bascule)
+			{
+				bascule = 0;
+				continue;
+			}
 		}
 	}
 }
