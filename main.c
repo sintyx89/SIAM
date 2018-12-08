@@ -32,7 +32,7 @@
 
 void main()
 {
-	char plateau[5][5][2] = {0}, sauv, linksave[256] = {"SIAM.save"}, reseaux;/*tableau avec toutes les positions des pions
+	char plateau[5][5][2] = {0}, sauv, link[256] = {"SIAM.save"}, reseaux;/*tableau avec toutes les positions des pions
 				      j'ai choisie les position sous forme matriciel
 				      donc plateau[y][x] le [2] est pour contenir 
 				      le type et l'orientation*/
@@ -53,7 +53,7 @@ void main()
     
 	do{
 		printf("Voulez-vous jouer avec une autre machine sur le reseau local ? (O/N) :");
-		saisie(plateau, bascule, linksave, &reseaux);
+		saisie(plateau, bascule, link, &reseaux);
 		minmaj(&reseaux);
 
 	}while(reseaux == 'O' && reseaux == 'N');
@@ -63,7 +63,7 @@ void main()
 	{
 		do{
 			printf("Voulez vous etres le serveur(s) ou le client(c) : ");
-			saisie(plateau, bascule, linksave, &reseaux);
+			saisie(plateau, bascule, link, &reseaux);
 		}while(reseaux == 's' && reseaux == 'c');
 
 		if(reseaux == 's')
@@ -81,20 +81,21 @@ void main()
 	{
   		do{
         		printf("Voulez-vous charger une partie précédente ? (O/N) : ");
-        		saisie(plateau, bascule, linksave, &sauv);
+        		saisie(plateau, bascule, link, &sauv);
       			minmaj(&sauv);
     		}while(sauv != 'O' && sauv != 'N');
 
     		if(sauv == 'O')
     		{
-		    	para_chargement(plateau, bascule, linksave);
-			chargement(plateau, &bascule, &pionsE, &pionsR, linksave);
+			para_chargement(plateau, bascule, link);
+			printf("main %s", link);
+			chargement(plateau, &bascule, &pionsE, &pionsR, link);
     		}
 
-		while(!victoire)
+		while(1)
 		{
 
-			entre(plateau, bascule, linksave, &pionsE, &pionsR, &bascsave);
+			entre(plateau, bascule, link, &pionsE, &pionsR, &bascsave);
 
 			if(!bascule)
 			{

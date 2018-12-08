@@ -52,7 +52,7 @@ void affichage(char plateau[5][5][2])
 }
 
 //fonction d'entrée de choix de coups, appelle affichage, deplace, place, rotation, sauvegarde, saisie
-short int entre(char plateau [5][5][2], short int bascule,char link[256], short int* pionsE, short int* pionsR, short int *bascsave)
+short int entre(char plateau [5][5][2], short int bascule, char link[256], short int* pionsE, short int* pionsR, short int *bascsave)
 { 
 	char choix;
 	short int coup = 0, **pion, victoire = 0;
@@ -107,7 +107,7 @@ short int entre(char plateau [5][5][2], short int bascule,char link[256], short 
         		sauvegarde(plateau, bascule, link);
        			printf("\npartie sauvegardée sur : %s", link);
     		}
-    		else if(choix == 's' && *bascsave == 0)
+    		else if(choix == 's' && *bascsave == 1)
     		{
       			para_save(plateau, bascule, link);
       			(*bascsave) = 1;
@@ -115,7 +115,7 @@ short int entre(char plateau [5][5][2], short int bascule,char link[256], short 
         
 	}while(!coup);
 
-	return victoire;
+	return *link;
 }
 
 //fonction de déplacement, coups possible si reserve du joueur<5

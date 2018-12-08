@@ -92,11 +92,10 @@ void regles()
   	printf("\n\n----Quitter à tout moment grace à ESC+ENTER-----\n");
   	getchar();
 }
-
 void para_chargement(char plateau[5][5][2], short int bascule, char link[256])
 {
  	char choix;
-  	short int erreur, n=0, m[100];
+  	short int erreur, n = 0;
   	struct dirent *lecture;
   	DIR* dossier = NULL;
   	dossier = opendir(".");
@@ -123,7 +122,7 @@ void para_chargement(char plateau[5][5][2], short int bascule, char link[256])
 			printf("-------------------------------------------------");
     			rewinddir(dossier);
     			printf("\nlequel ? : ");
-    			scanf("%d", &choix);
+    			saisie(plateau, bascule,link, &choix);
     		}while(!(choix <= 100 && choix > 0));
     
 	//passe devant tous les autres fichier
@@ -155,10 +154,12 @@ void chargement(char plateau[5][5][2], short int *bascule, short int *pionsE, sh
 {
     	char cache;
     	short int code, m, n, t;
+	printf("%s", link);
   
  	FILE* save = NULL;
     	save = fopen(link, "r"); // ouverture du fichier en mode lecture
     	fseek(save, 0, SEEK_SET);
+	printf("%s", link);
   
   //cas de sauvegarde lisible
     if(save != NULL)
@@ -202,7 +203,7 @@ void chargement(char plateau[5][5][2], short int *bascule, short int *pionsE, sh
 void para_save(char plateau[5][5][2], short int bascule, char link[256])
 {
   	char choix;
-  	short int erreur, n=0, m[100];
+  	short int erreur, n = 0, m[100];
   	struct dirent *lecture;
   	DIR* dossier = NULL;
   	dossier = opendir(".");
@@ -214,7 +215,8 @@ void para_save(char plateau[5][5][2], short int bascule, char link[256])
   		saisie(plateau, bascule, link, &choix);
   		minmaj(&choix);
   	}while(choix != 'A' && choix != 'N');
-  
+ 	
+	//choix de save ancienne
   	if(choix == 'A' && dossier != NULL)
   	{
     		do
