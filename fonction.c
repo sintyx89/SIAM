@@ -416,11 +416,14 @@ void deplaceur(char plateau[5][5][2], char orientation, short int casx, short in
                                         return;
 				}
 				if((plateau[casy][n][0] == 'M') && (n == 4))
-					for(n = casx - 1; n >= 0 && sortie; n--)
-					
-						if(plateau[casy][n][0] == 'M' || plateau[casy][n][0] == 'E')
-						victoire(plateau[casy][n][0]);
-						
+					for(n = casx - 1; n >= 0; n--)
+					{	
+						if(cache[0] == 'M')
+							victoire('M');
+						if(cache[0] == 'E')
+							victoire('E');
+						cache[0] == plateau[casy][n-1][0];
+					}	
 				
         	    	 	cache2[0] = plateau[casy][n][0];
                			cache2[1] = plateau[casy][n][1];
@@ -466,10 +469,14 @@ void deplaceur(char plateau[5][5][2], char orientation, short int casx, short in
 					return;
                                 }
                                 if((plateau[casy][n][0] == 'M') && (n == 0))
-                                        for(n = casx + 1; n <= 4 && sortie; n++)	
-						if(plateau[casy][n][0] == 'M' || plateau[casy][n][0] == 'E')
-                                                victoire(plateau[casy][n][0]);
-                                        
+                                        for(n = casx + 1; n <= 4 && sortie; n++)
+					{	
+						if(cache[0] == 'M')
+							victoire('M');
+						if(cache[0] == 'E')
+							victoire('E');
+						cache[0] == plateau[casy][n+1][0];
+					}
                                 
 				
 				
@@ -515,9 +522,13 @@ void deplaceur(char plateau[5][5][2], char orientation, short int casx, short in
                                 }
                                 if((plateau[n][casx][0] == 'M') && (n == 0))
                                         for(n = casy + 1; n <= 4 && sortie; n++)
-						if(plateau[n][casx][0] == 'M' || plateau[n][casx][0] == 'E')
-							victoire(plateau[n][casx][0]);
-
+					{
+						if(cache[0] == 'M')
+							victoire('M');
+						if(cache[0] == 'E')
+							victoire('E');
+						cache[0] == plateau[n+1][casx][0];
+					}
              			cache2[0] = plateau[n][casx][0];
               			cache2[1] = plateau[n][casx][1];
 		       		plateau[n][casx][0] = cache[0];
@@ -559,8 +570,15 @@ void deplaceur(char plateau[5][5][2], char orientation, short int casx, short in
                                 }
                                 if((plateau[n][casx][0] == 'M') && (n = 4))
                                         for(n = casy - 1; n >= 0 && sortie; n--)
-						if(plateau[n][casx][0] == 'M' || plateau[n][casx][0] == 'E')
-							victoire(plateau[n][casx][0]);
+					{
+						if(cache[0] == 'M')
+							victoire('M');
+						if(cache[0] == 'E')
+							victoire('E');
+						cache[0] == plateau[n-1][casx][0];
+
+					}
+					
 
         	     		cache2[0] = plateau[n][casx][0];
         	        	cache2[1] = plateau[n][casx][1];
@@ -568,7 +586,7 @@ void deplaceur(char plateau[5][5][2], char orientation, short int casx, short in
         	     		plateau[n][casx][1] = cache[1];
         	    	}
         //cas case vide	    
-            		if(plateau[n][casx][2] == 0)	
+            	if(plateau[n][casx][0] == 0)	
                 {
             		    	plateau[n][casx][0] = cache[0];
            	 	    	plateau[n][casx][1] = cache[1];

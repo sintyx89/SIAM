@@ -170,14 +170,14 @@ void chargement(char plateau[5][5][2], short int *bascule, short int *pionsE, sh
                 {   
                         fscanf(save, "%c", &cache);
                         if(cache == 'O')
-                            plateau[n][m][t] = 0;
+                        	plateau[n][m][t] = 0;
                         else 
-                           	plateau[n][m][t] = cache;
+                        	plateau[n][m][t] = cache;
                         	printf("--%d%c", plateau[n][m][t], cache);
                 }
-             	if(plateau[n][m][1] == 'R')
+             	if(plateau[n][m][0] == 'R')
                   	(*pionsR)--;
-             	if(plateau[n][m][1] == 'E')
+             	if(plateau[n][m][0] == 'E')
                   	(*pionsE)--;
             }
       
